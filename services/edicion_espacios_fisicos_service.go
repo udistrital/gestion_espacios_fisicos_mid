@@ -209,7 +209,7 @@ func ActualizarNuevaDependencia(espacioModificado *models.EspacioFisico ,transac
 	}
 
 	var dependenciaEspacioOriginal []models.AsignacionEspacioFisicoDependencia
-	url = beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia?query=EspacioFisicoId.Id:" + strconv.Itoa(transaccion.EspacioId)
+	url = beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia?query=EspacioFisicoId.Id:" + strconv.Itoa(transaccion.EspacioId)  + ",Activo:true"
 	if err := request.GetJson(url, &dependenciaEspacioOriginal); err != nil || dependenciaEspacioOriginal[0].Id == 0 {
 		logs.Error(err)
 		panic(err.Error())
