@@ -52,20 +52,29 @@ func BuscarEspacioFisico(transaccion *models.BusquedaEspacioFisico) (resultadoBu
 		}
 	}
 
-	fmt.Println(urlBusquedaTipoEspacio)
+	
 
 	var idsTipo, idsDependencia, idNombre, idTipoEspacio []models.EspacioFisico
+	listasNoVacias := 0
 	if urlBusquedaTipo != ""{
+		urlBusquedaTipo += ",Activo:true"
 		idsTipo = BusquedaTipo(urlBusquedaTipo)
+		listasNoVacias++
 	}
 	if urlBusquedaDependencia != ""{
+		urlBusquedaDependencia += ",Activo:true"
 		idsDependencia = BusquedaDepependencia(urlBusquedaDependencia)
+		listasNoVacias++
 	}
 	if urlBusquedaNombre != ""{
+		urlBusquedaNombre += ",Activo:true"
 		idNombre = BusquedaNombre(urlBusquedaNombre)
+		listasNoVacias++
 	}
 	if urlBusquedaTipoEspacio != ""{
+		urlBusquedaTipoEspacio += ",Activo:true"
 		idTipoEspacio = BusquedaNombre(urlBusquedaTipoEspacio)
+		listasNoVacias++
 	}
 
 	contador := make(map[int]int)
@@ -73,10 +82,9 @@ func BuscarEspacioFisico(transaccion *models.BusquedaEspacioFisico) (resultadoBu
 
 	listas := [][]models.EspacioFisico{idsTipo, idsDependencia, idNombre, idTipoEspacio}
 
-	listasNoVacias := 0
+	
 	for _, lista := range listas {
 		if len(lista) > 0 {
-			listasNoVacias++
 			for _, espacio := range lista {
 				encontrado := false
 				if existente, ok := espaciosMap[espacio.Id]; ok {
@@ -92,6 +100,9 @@ func BuscarEspacioFisico(transaccion *models.BusquedaEspacioFisico) (resultadoBu
 			}
 		}
 	}
+
+	fmt.Println(idsTipo)
+	fmt.Println(idsDependencia)
 
 	var repetidos []models.EspacioFisico
 	for id, count := range contador {
@@ -115,6 +126,7 @@ func espacioFisicoIgual(a, b models.EspacioFisico) bool {
 
 func BusquedaTipo(url string) (ids []models.EspacioFisico){
 	var respuesta []models.TipoUsoEspacioFisico
+	fmt.Println(url)
 	if err := request.GetJson(url, &respuesta); err != nil {
 		logs.Error(err)
 		panic(err.Error())
@@ -156,7 +168,7 @@ func CrearRespuestaBusqueda(id models.EspacioFisico) models.RespuestaBusquedaEsp
 	resultado.EspacioFisico = &id
 	resultado.TipoEspacioFisico = id.TipoEspacioFisicoId
 	var tipoUsoEspacioFisico []models.TipoUsoEspacioFisico
-	url := beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico?limit=-1&query=EspacioFisicoId.id:" + strconv.Itoa(id.Id)
+	url := beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico?limit=-1&query=EspacioFisicoId.id:" + strconv.Itoa(id.Id) +",Activo:true"
 	if err := request.GetJson(url, &tipoUsoEspacioFisico); err != nil {
 		logs.Error(err)
 		panic(err.Error())
@@ -198,13 +210,3 @@ func CrearRespuestaBusqueda(id models.EspacioFisico) models.RespuestaBusquedaEsp
 	return resultado
 }
 
-func EditarDependencia(transaccion *models.EditarEspaciosFisicos) (alerta []string, outputError map[string]interface{}) {
-	defer func() {
-		if err := recover(); err != nil {
-			outputError = map[string]interface{}{"funcion": "BuscarEspacioFisico", "err": err, "status": "500"}
-			panic(outputError)
-		}
-	}()
-	fmt.Println("BUSCA ESPACIO FISICO")
-	return alerta, outputError
-}

@@ -2,10 +2,13 @@ package models
 
 
 type EditarEspaciosFisicos struct {
-	DependenciaId			int
-	Nombre					string
-	TelefonoDependencia 	string
-	CorreoElectronico 		string
-	DependenciaAsociadaId	int
-	TipoDependenciaId		[]int
+	EspacioId			int
+	Nombre				string
+	Descripcion 		string
+	CodAbreviacion 		string
+	DependenciaId		int
+	TipoEspacioId		int
+	TipoUsoId			int
+	TipoEdificacion		string
+	TipoTerreno			string
 }

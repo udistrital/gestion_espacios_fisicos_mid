@@ -16,7 +16,16 @@ func init() {
             Filters: nil,
             Params: nil})
 
-    beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:RegistroEspaciosFisicosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/registro_espacios_fisicos_mid/controllers:RegistroEspaciosFisicosController"],
+    beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"],
+        beego.ControllerComments{
+            Method: "EditarEspacioFisico",
+            Router: "/EditarEspacioFisico",
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:RegistroEspaciosFisicosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:RegistroEspaciosFisicosController"],
         beego.ControllerComments{
             Method: "RegistroEspacioFisicos",
             Router: "/RegistroEspacioFisico",
