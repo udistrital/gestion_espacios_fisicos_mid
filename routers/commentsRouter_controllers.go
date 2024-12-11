@@ -7,7 +7,7 @@ import (
 
 func init() {
 
-    beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"],
+    beego.GlobalControllerRouter["github.com/udistrital/espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"],
         beego.ControllerComments{
             Method: "BuscarEspacioFisico",
             Router: "/BuscarEspacioFisico",
@@ -16,7 +16,7 @@ func init() {
             Filters: nil,
             Params: nil})
 
-    beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"],
+    beego.GlobalControllerRouter["github.com/udistrital/espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"],
         beego.ControllerComments{
             Method: "EditarEspacioFisico",
             Router: "/EditarEspacioFisico",
@@ -25,7 +25,7 @@ func init() {
             Filters: nil,
             Params: nil})
 
-    beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:RegistroEspaciosFisicosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:RegistroEspaciosFisicosController"],
+    beego.GlobalControllerRouter["github.com/udistrital/espacios_fisicos_mid/controllers:RegistroEspaciosFisicosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/espacios_fisicos_mid/controllers:RegistroEspaciosFisicosController"],
         beego.ControllerComments{
             Method: "RegistroEspacioFisicos",
             Router: "/RegistroEspacioFisico",

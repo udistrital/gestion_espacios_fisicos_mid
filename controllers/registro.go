@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/astaxie/beego"
-	"github.com/udistrital/gestion_espacios_fisicos_mid/helpers"
-	"github.com/udistrital/gestion_espacios_fisicos_mid/models"
-	"github.com/udistrital/gestion_espacios_fisicos_mid/services"
+	"github.com/udistrital/espacios_fisicos_mid/helpers"
+	"github.com/udistrital/espacios_fisicos_mid/models"
+	"github.com/udistrital/espacios_fisicos_mid/services"
 )
 
 // RegistroController operations for Registro
@@ -24,12 +24,12 @@ func (c *RegistroEspaciosFisicosController) URLMapping() {
 // @Title RegistroEspacioFisico
 // @Description Registro Espacio Fisico
 // @Param	body		body 	{}	true		"body for Registro Espacio Fisico content"
-// @Success 201 {init} 
+// @Success 201 {init}
 // @Failure 400 the request contains incorrect syntax
 // @router /RegistroEspacioFisico [post]
 func (c *RegistroEspaciosFisicosController) RegistroEspacioFisicos() {
 	fmt.Println("REGISTRO ESPACIO FISICO")
-	defer helpers.ErrorController(c.Controller,"RegistroEspacioFisico")
+	defer helpers.ErrorController(c.Controller, "RegistroEspacioFisico")
 
 	if v, e := helpers.ValidarBody(c.Ctx.Input.RequestBody); !v || e != nil {
 		panic(map[string]interface{}{"funcion": "RegistroEspacioFisico", "err": helpers.ErrorBody, "status": "400"})

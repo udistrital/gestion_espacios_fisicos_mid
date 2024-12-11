@@ -8,13 +8,13 @@
 package routers
 
 import (
-	"github.com/udistrital/gestion_espacios_fisicos_mid/controllers"
 	"github.com/astaxie/beego"
+	"github.com/udistrital/espacios_fisicos_mid/controllers"
 )
 
 func init() {
-    ns := beego.NewNamespace("/v1",
-		beego.NSNamespace("/gestion_espacios_fisicos_mid",
+	ns := beego.NewNamespace("/v1",
+		beego.NSNamespace("/espacios_fisicos_mid",
 			beego.NSInclude(
 				&controllers.GestionEspaciosFisicosController{},
 				&controllers.RegistroEspaciosFisicosController{},

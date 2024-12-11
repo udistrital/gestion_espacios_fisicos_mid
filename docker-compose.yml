@@ -3,7 +3,7 @@ version: '3.2'
 
 services: 
 
-  gestion_espacios_fisicos_mid:
+  espacios_fisicos_mid:
 
     image: golang:1.18-alpine
     container_name: ${API_NAME}
@@ -12,21 +12,21 @@ services:
       - .:/go/src/${API_BASE_DIR}/${API_NAME}
     environment:
       - GO111MODULE=on
-    env_file: 
+    env_file:
       - .env
-    ports: 
-      - "${GESTION_ESPACIOS_FISICOS_MID_HTTP_PORT}:${GESTION_ESPACIOS_FISICOS_MID_HTTP_PORT}"  
+    ports:
+      - "${ESPACIOS_FISICOS_MID_HTTP_PORT}:${ESPACIOS_FISICOS_MID_HTTP_PORT}"
     working_dir: /go/src
     command: sh -c 'cd ${API_BASE_DIR}/${API_NAME};go get -u github.com/beego/bee ;go get -v -u ./...; pwd;go mod init;bee migrate -driver=postgres -conn="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_DB_PORT}/${POSTGRES_DB}?sslmode=disable&search_path=public"; bee run -downdoc=true -gendoc=true'
 
   data_base:
-    container_name: ${GESTION_ESPACIOS_FISICOS_MID_LOCAL}
+    container_name: ${ESPACIOS_FISICOS_MID_LOCAL}
     image: postgres:10.34-alpine
-    volumes: 
+    volumes:
         - postgres_data:/var/lib/postgresql/data
-    ports: 
-        - "${gestion_espacios_fisicos_mid_PGPORT}:${gestion_espacios_fisicos_mid_PGPORT}"        
-    env_file: 
+    ports:
+        - "${espacios_fisicos_mid_PGPORT}:${espacios_fisicos_mid_PGPORT}"
+    env_file:
         - .env
 
 volumes:

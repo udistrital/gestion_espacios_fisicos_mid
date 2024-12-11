@@ -3,11 +3,10 @@ package main
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/plugins/cors"
-	_ "github.com/udistrital/gestion_espacios_fisicos_mid/routers"
+	auditoria "github.com/udistrital/auditoria"
+	_ "github.com/udistrital/espacios_fisicos_mid/routers"
 	apistatus "github.com/udistrital/utils_oas/apiStatusLib"
-	auditoria "github.com/udistrital/utils_oas/auditoria"
 	"github.com/udistrital/utils_oas/customerrorv2"
-	"github.com/udistrital/utils_oas/xray"
 )
 
 func main() {
@@ -32,7 +31,7 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-	xray.InitXRay()
+	//xray.InitXRay()
 	beego.ErrorController(&customerrorv2.CustomErrorController{})
 	apistatus.Init()
 	auditoria.InitMiddleware()
