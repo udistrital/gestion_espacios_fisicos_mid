@@ -16,6 +16,6 @@ swagger/lib/
 .env
 go.mod
 go.sum
-gestion_espacios_fisicos_mid
+espacios_fisicos_mid
 *.exe*
 .exe~
