@@ -1,6 +1,6 @@
 
-# gestion_espacios_fisicos_mid
-:heavy_check_mark: Check: Repositorio para gestion_espacios_fisicos_mid.
+# espacios_fisicos_mid
+:heavy_check_mark: Check: Repositorio para espacios_fisicos_mid.
 
 ## Especificaciones Técnicas
 
@@ -14,7 +14,7 @@
 ### Variables de Entorno
 ```shell
 # parametros de api
-GESTION_ESPACIOS_FISICOS_HTTP_PORT=[Puerto de exposición del API]
+ESPACIOS_FISICOS_HTTP_PORT=[Puerto de exposición del API]
 ...
 ```
 **NOTA:** Las variables se pueden ver en el fichero conf/app.conf y están identificadas acorde a los lineamientos de definición de variables...
@@ -22,16 +22,16 @@ GESTION_ESPACIOS_FISICOS_HTTP_PORT=[Puerto de exposición del API]
 ### Ejecución del Proyecto
 ```shell
 #1. Obtener el repositorio con Go
-go get github.com/udistrital/gestion_espacios_fisicos_mid
+go get github.com/udistrital/espacios_fisicos_mid
 
 #2. Moverse a la carpeta del repositorio
-cd $GOPATH/src/github.com/udistrital/gestion_espacios_fisicos_mid
+cd $GOPATH/src/github.com/udistrital/espacios_fisicos_mid
 
 # 3. Moverse a la rama **develop**
 git pull origin develop && git checkout develop
 
 # 4. alimentar todas las variables de entorno que utiliza el proyecto.
-GESTION_DESPACIOS_FISICOS_HTTP_PORT=8080 GESTION_DESPACIOS_FISICOS_SOME_VARIABLE=valor bee run
+DESPACIOS_FISICOS_HTTP_PORT=8080 DESPACIOS_FISICOS_SOME_VARIABLE=valor bee run
 ```
 
 ### Ejecución Dockerfile
@@ -42,10 +42,10 @@ GESTION_DESPACIOS_FISICOS_HTTP_PORT=8080 GESTION_DESPACIOS_FISICOS_SOME_VARIABLE
 ### Ejecución docker-compose
 ```shell
 #1. Clonar el repositorio
-git clone -b develop https://github.com/udistrital/gestion_espacios_fisicos_mid
+git clone -b develop https://github.com/udistrital/espacios_fisicos_mid
 
 #2. Moverse a la carpeta del repositorio
-cd gestion_espacios_fisicos_mid
+cd espacios_fisicos_mid
 
 #3. Crear un fichero con el nombre **custom.env**
 touch custom.env
@@ -74,15 +74,15 @@ Pruebas unitarias
 
 | Develop | Relese 0.0.1 | Master |
 | -- | -- | -- |
-| [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/gestion_espacios_fisicos_mid/status.svg?ref=refs/heads/develop)](https://hubci.portaloas.udistrital.edu.co/udistrital/gestion_espacios_fisicos_mid) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/gestion_espacios_fisicos_mid/status.svg?ref=refs/heads/release/0.0.1)](https://hubci.portaloas.udistrital.edu.co/udistrital/gestion_espacios_fisicos_mid) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/gestion_espacios_fisicos_mid/status.svg)](https://hubci.portaloas.udistrital.edu.co/udistrital/gestion_espacios_fisicos_mid) |
+| [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/espacios_fisicos_mid/status.svg?ref=refs/heads/develop)](https://hubci.portaloas.udistrital.edu.co/udistrital/espacios_fisicos_mid) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/espacios_fisicos_mid/status.svg?ref=refs/heads/release/0.0.1)](https://hubci.portaloas.udistrital.edu.co/udistrital/espacios_fisicos_mid) | [![Build Status](https://hubci.portaloas.udistrital.edu.co/api/badges/udistrital/espacios_fisicos_mid/status.svg)](https://hubci.portaloas.udistrital.edu.co/udistrital/espacios_fisicos_mid) |
 
 
 ## Licencia
 
-This file is part of gestion_espacios_fisicos_mid.
+This file is part of espacios_fisicos_mid.
 
-gestion_espacios_fisicos_mid is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+espacios_fisicos_mid is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-gestion_espacios_fisicos_mid is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+espacios_fisicos_mid is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with gestion_espacios_fisicos_mid. If not, see https://www.gnu.org/licenses/.
+You should have received a copy of the GNU General Public License along with espacios_fisicos_mid. If not, see https://www.gnu.org/licenses/.

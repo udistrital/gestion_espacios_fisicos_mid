@@ -6,7 +6,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
-	"github.com/udistrital/gestion_espacios_fisicos_mid/models"
+	"github.com/udistrital/espacios_fisicos_mid/models"
 	"github.com/udistrital/utils_oas/request"
 	"github.com/udistrital/utils_oas/time_bogota"
 )
@@ -44,7 +44,7 @@ func RegistrarEspacioFisico(transaccion *models.NuevoEspacioFisico) (alerta []st
 	}
 
 	var espacioFisico = CrearEspacioFisico(transaccion, tipoEspacioFisico, &creaciones)
-	
+
 	CrearAsignacionEspacioFisicoDependencia(transaccion, dependencia, espacioFisico, &creaciones)
 	CrearTipoUsoEspacioFisico(transaccion, tipoUso, espacioFisico, &creaciones)
 	fmt.Println("ESPACIO FISICO ID")
@@ -79,7 +79,7 @@ func CrearEspacioFisico(transaccion *models.NuevoEspacioFisico, tipoEspacioFisic
 	nuevoEspacioFisico.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	url := beego.AppConfig.String("OikosCrudUrl") + "espacio_fisico"
 	var resEspacioFisicoRegistrado map[string]interface{}
-	if err := request.SendJson(url, "POST", &resEspacioFisicoRegistrado, nuevoEspacioFisico); err != nil || resEspacioFisicoRegistrado["Id"] == nil{
+	if err := request.SendJson(url, "POST", &resEspacioFisicoRegistrado, nuevoEspacioFisico); err != nil || resEspacioFisicoRegistrado["Id"] == nil {
 		logs.Error(err)
 		panic(err.Error())
 	}
@@ -101,7 +101,7 @@ func CrearAsignacionEspacioFisicoDependencia(transaccion *models.NuevoEspacioFis
 	asignacionEspacioFisicoDependencia.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	url := beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia"
 	var resAsignacionEspacioFisicoDependenciaRegistrado map[string]interface{}
-	if err := request.SendJson(url, "POST", &resAsignacionEspacioFisicoDependenciaRegistrado, asignacionEspacioFisicoDependencia); err != nil || resAsignacionEspacioFisicoDependenciaRegistrado["Id"] == nil{
+	if err := request.SendJson(url, "POST", &resAsignacionEspacioFisicoDependenciaRegistrado, asignacionEspacioFisicoDependencia); err != nil || resAsignacionEspacioFisicoDependenciaRegistrado["Id"] == nil {
 		fmt.Println("ENTRA A ERROR DE ASIGNACION")
 		rollbackEspacioFisicoCreado(creaciones)
 		logs.Error(err)
@@ -121,7 +121,7 @@ func CrearTipoUsoEspacioFisico(transaccion *models.NuevoEspacioFisico, tipoUso m
 	tipoUsoEspacioFisico.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	url := beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico"
 	var resTipoUsoEspacioFisicoRegistrado map[string]interface{}
-	if err := request.SendJson(url, "POST", &resTipoUsoEspacioFisicoRegistrado, tipoUsoEspacioFisico); err != nil || resTipoUsoEspacioFisicoRegistrado["Id"] == nil{
+	if err := request.SendJson(url, "POST", &resTipoUsoEspacioFisicoRegistrado, tipoUsoEspacioFisico); err != nil || resTipoUsoEspacioFisicoRegistrado["Id"] == nil {
 		rollbackAsignacionEspacioFisicoDependencia(creaciones)
 		logs.Error(err)
 		panic(err.Error())
@@ -130,7 +130,6 @@ func CrearTipoUsoEspacioFisico(transaccion *models.NuevoEspacioFisico, tipoUso m
 	fmt.Println("TIPO USO CREADO")
 	creaciones.TipoUsoEspacioFisico = int(resTipoUsoEspacioFisicoRegistrado["Id"].(float64))
 }
-
 
 func CrearEspacioFisicoCampo(transaccion *models.NuevoEspacioFisico, espacioFisico models.EspacioFisico, creaciones *models.Creaciones) (campos []models.EspacioFisicoCampo) {
 	for _, campo := range transaccion.CamposExistentes{

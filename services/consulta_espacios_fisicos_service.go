@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
-	"github.com/udistrital/utils_oas/request"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
-	"github.com/udistrital/gestion_espacios_fisicos_mid/models"
+	"github.com/udistrital/espacios_fisicos_mid/models"
+	"github.com/udistrital/utils_oas/request"
 )
 
 func BuscarEspacioFisico(transaccion *models.BusquedaEspacioFisico) (resultadoBusqueda []models.RespuestaBusquedaEspacioFisico, outputError map[string]interface{}) {
@@ -22,37 +23,35 @@ func BuscarEspacioFisico(transaccion *models.BusquedaEspacioFisico) (resultadoBu
 	var urlBusquedaNombre string
 	var urlBusquedaTipoEspacio string
 
-	if transaccion.TipoUsoId != 0{
+	if transaccion.TipoUsoId != 0 {
 		urlBusquedaTipo = beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico?limit=-1&query=TipoUsoId:" + strconv.Itoa(transaccion.TipoUsoId)
 	}
 
-	if transaccion.DependenciaId != 0{
+	if transaccion.DependenciaId != 0 {
 		urlBusquedaDependencia = beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia?limit=-1&query=DependenciaId.Id:" + strconv.Itoa(transaccion.DependenciaId)
 	}
 
-	if transaccion.TipoEspacioFisicoId != 0{
-		if urlBusquedaTipo != ""{
+	if transaccion.TipoEspacioFisicoId != 0 {
+		if urlBusquedaTipo != "" {
 			urlBusquedaTipo += ",EspacioFisicoId.TipoEspacioFisicoId.Id:" + strconv.Itoa(transaccion.TipoEspacioFisicoId)
-		}else if urlBusquedaDependencia != ""{
+		} else if urlBusquedaDependencia != "" {
 			urlBusquedaDependencia += ",EspacioFisicoId.TipoEspacioFisicoId.Id:" + strconv.Itoa(transaccion.TipoEspacioFisicoId)
-		}else{
+		} else {
 			urlBusquedaTipoEspacio = beego.AppConfig.String("OikosCrudUrl") + "espacio_fisico?limit=-1&query=TipoEspacioFisicoId.Id:" + strconv.Itoa(transaccion.TipoEspacioFisicoId)
-		}
-	}	
-
-	if transaccion.NombreEspacioFisico != ""{
-		if urlBusquedaTipo != ""{
-			urlBusquedaTipo += ",EspacioFisicoId.Nombre:"+ url.QueryEscape(transaccion.NombreEspacioFisico)
-		}else if urlBusquedaDependencia != ""{
-			urlBusquedaDependencia+= ",EspacioFisicoId.Nombre:"+ url.QueryEscape(transaccion.NombreEspacioFisico)
-		}else if urlBusquedaTipoEspacio != ""{
-			urlBusquedaTipoEspacio += ",Nombre:"+ url.QueryEscape(transaccion.NombreEspacioFisico)
-		}else{
-			urlBusquedaNombre = beego.AppConfig.String("OikosCrudUrl") + "espacio_fisico?limit=-1&query=Nombre:" + url.QueryEscape(transaccion.NombreEspacioFisico)
 		}
 	}
 
-	
+	if transaccion.NombreEspacioFisico != "" {
+		if urlBusquedaTipo != "" {
+			urlBusquedaTipo += ",EspacioFisicoId.Nombre:" + url.QueryEscape(transaccion.NombreEspacioFisico)
+		} else if urlBusquedaDependencia != "" {
+			urlBusquedaDependencia += ",EspacioFisicoId.Nombre:" + url.QueryEscape(transaccion.NombreEspacioFisico)
+		} else if urlBusquedaTipoEspacio != "" {
+			urlBusquedaTipoEspacio += ",Nombre:" + url.QueryEscape(transaccion.NombreEspacioFisico)
+		} else {
+			urlBusquedaNombre = beego.AppConfig.String("OikosCrudUrl") + "espacio_fisico?limit=-1&query=Nombre:" + url.QueryEscape(transaccion.NombreEspacioFisico)
+		}
+	}
 
 	var idsTipo, idsDependencia, idNombre, idTipoEspacio []models.EspacioFisico
 	listasNoVacias := 0
@@ -82,7 +81,6 @@ func BuscarEspacioFisico(transaccion *models.BusquedaEspacioFisico) (resultadoBu
 
 	listas := [][]models.EspacioFisico{idsTipo, idsDependencia, idNombre, idTipoEspacio}
 
-	
 	for _, lista := range listas {
 		if len(lista) > 0 {
 			for _, espacio := range lista {
@@ -111,7 +109,7 @@ func BuscarEspacioFisico(transaccion *models.BusquedaEspacioFisico) (resultadoBu
 		}
 	}
 
-	for _, id := range repetidos{
+	for _, id := range repetidos {
 		var resultado = CrearRespuestaBusqueda(id)
 		resultadoBusqueda = append(resultadoBusqueda, resultado)
 	}
@@ -120,47 +118,45 @@ func BuscarEspacioFisico(transaccion *models.BusquedaEspacioFisico) (resultadoBu
 }
 
 func espacioFisicoIgual(a, b models.EspacioFisico) bool {
-    return a.Id == b.Id
+	return a.Id == b.Id
 }
 
-
-func BusquedaTipo(url string) (ids []models.EspacioFisico){
+func BusquedaTipo(url string) (ids []models.EspacioFisico) {
 	var respuesta []models.TipoUsoEspacioFisico
 	fmt.Println(url)
 	if err := request.GetJson(url, &respuesta); err != nil {
 		logs.Error(err)
 		panic(err.Error())
 	}
-	for _, espacio := range respuesta{
+	for _, espacio := range respuesta {
 		ids = append(ids, *espacio.EspacioFisicoId)
 	}
 	return ids
 }
 
-func BusquedaDepependencia(url string) (ids []models.EspacioFisico){
+func BusquedaDepependencia(url string) (ids []models.EspacioFisico) {
 	var respuesta []models.AsignacionEspacioFisicoDependencia
 	if err := request.GetJson(url, &respuesta); err != nil {
 		logs.Error(err)
 		panic(err.Error())
 	}
-	for _, espacio := range respuesta{
+	for _, espacio := range respuesta {
 		ids = append(ids, *espacio.EspacioFisicoId)
 	}
 	return ids
 }
 
-func BusquedaNombre(url string) (ids []models.EspacioFisico){
+func BusquedaNombre(url string) (ids []models.EspacioFisico) {
 	var respuesta []models.EspacioFisico
 	if err := request.GetJson(url, &respuesta); err != nil {
 		logs.Error(err)
 		panic(err.Error())
 	}
-	for _, espacio := range respuesta{
+	for _, espacio := range respuesta {
 		ids = append(ids, espacio)
 	}
 	return ids
 }
-
 
 func CrearRespuestaBusqueda(id models.EspacioFisico) models.RespuestaBusquedaEspacioFisico {
 	var resultado models.RespuestaBusquedaEspacioFisico
@@ -168,14 +164,14 @@ func CrearRespuestaBusqueda(id models.EspacioFisico) models.RespuestaBusquedaEsp
 	resultado.EspacioFisico = &id
 	resultado.TipoEspacioFisico = id.TipoEspacioFisicoId
 	var tipoUsoEspacioFisico []models.TipoUsoEspacioFisico
-	url := beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico?limit=-1&query=EspacioFisicoId.id:" + strconv.Itoa(id.Id) +",Activo:true"
+	url := beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico?limit=-1&query=EspacioFisicoId.id:" + strconv.Itoa(id.Id) + ",Activo:true"
 	if err := request.GetJson(url, &tipoUsoEspacioFisico); err != nil {
 		logs.Error(err)
 		panic(err.Error())
 	}
-	if len(tipoUsoEspacioFisico) >0{
+	if len(tipoUsoEspacioFisico) > 0 {
 		resultado.TipoUso = tipoUsoEspacioFisico[0].TipoUsoId
-	}else{
+	} else {
 		resultado.TipoUso = &models.TipoUso{}
 	}
 
@@ -209,4 +205,3 @@ func CrearRespuestaBusqueda(id models.EspacioFisico) models.RespuestaBusquedaEsp
 
 	return resultado
 }
-
