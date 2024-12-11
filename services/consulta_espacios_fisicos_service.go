@@ -55,23 +55,23 @@ func BuscarEspacioFisico(transaccion *models.BusquedaEspacioFisico) (resultadoBu
 
 	var idsTipo, idsDependencia, idNombre, idTipoEspacio []models.EspacioFisico
 	listasNoVacias := 0
-	if urlBusquedaTipo != "" {
-		urlBusquedaTipo += ",Activo:true"
+	if urlBusquedaTipo != ""{
+		// urlBusquedaTipo += ",Activo:true"
 		idsTipo = BusquedaTipo(urlBusquedaTipo)
 		listasNoVacias++
 	}
-	if urlBusquedaDependencia != "" {
-		urlBusquedaDependencia += ",Activo:true"
+	if urlBusquedaDependencia != ""{
+		// urlBusquedaDependencia += ",Activo:true"
 		idsDependencia = BusquedaDepependencia(urlBusquedaDependencia)
 		listasNoVacias++
 	}
-	if urlBusquedaNombre != "" {
-		urlBusquedaNombre += ",Activo:true"
+	if urlBusquedaNombre != ""{
+		// urlBusquedaNombre += ",Activo:true"
 		idNombre = BusquedaNombre(urlBusquedaNombre)
 		listasNoVacias++
 	}
-	if urlBusquedaTipoEspacio != "" {
-		urlBusquedaTipoEspacio += ",Activo:true"
+	if urlBusquedaTipoEspacio != ""{
+		// urlBusquedaTipoEspacio += ",Activo:true"
 		idTipoEspacio = BusquedaNombre(urlBusquedaTipoEspacio)
 		listasNoVacias++
 	}

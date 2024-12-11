@@ -1,7 +1,7 @@
 package models
 
 type NuevoEspacioFisico struct {
-	CamposDinamicos		[]*CamposDinamicos
+	CamposExistentes	[]*CamposEspacioFisico
 	DependenciaPadre	int
 	EspacioFisico		*EspacioFisico
 	TipoEdificacion		int
