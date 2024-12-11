@@ -3,7 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-
+	"strconv"
 	"github.com/astaxie/beego"
 	"github.com/udistrital/gestion_espacios_fisicos_mid/helpers"
 	"github.com/udistrital/gestion_espacios_fisicos_mid/models"
@@ -76,5 +76,53 @@ func (c *GestionEspaciosFisicosController) EditarEspacioFisico() {
 	} else {
 		panic(map[string]interface{}{"funcion": "EditarEspacioFisico", "err": err.Error(), "status": "400"})
 	}
+	c.ServeJSON()
+}
+
+// PutActivarEspacioFisico ...
+// @Title PutActivarEspacioFisico
+// @Description Activar el espacio fisico
+// @Param   body        body    {}  true        "body Activar Espacio Fisico content"
+// @Success 200 {}
+// @Failure 400 the request contains incorrect syntax
+// @router /ActivarEspacioFisico/:id [put]
+func (c *GestionEspaciosFisicosController) PutActivarEspacioFisico() {
+	defer helpers.ErrorController(c.Controller,"ActivarEspacioFisico")
+	idStr := c.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(idStr)
+
+	resultado, err := services.PutActivarEspacioFisico(id)
+
+	if err == nil {
+		c.Ctx.Output.SetStatus(200)
+		c.Data["json"] = map[string]interface{}{"Success": true, "Status": 201, "Message": "Espacio Fisico activado con exito", "Data": resultado}
+	} else {
+		panic(map[string]interface{}{"funcion": "PutActivarEspacioFisico", "err": err, "status": "400"})
+	}
+
+	c.ServeJSON()
+}
+
+// PutDesactivarEspacioFisico ...
+// @Title PutActivarEspacioFisico
+// @Description Activar el espacio fisico
+// @Param   body        body    {}  true        "body Desactivar Espacio Fisico content"
+// @Success 200 {}
+// @Failure 400 the request contains incorrect syntax
+// @router /DesactivarEspacioFisico/:id [put]
+func (c *GestionEspaciosFisicosController) PutDesactivarEspacioFisico() {
+	defer helpers.ErrorController(c.Controller,"DesactivarEspacioFisico")
+	idStr := c.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(idStr)
+
+	resultado, err := services.PutDesactivarEspacioFisico(id)
+
+	if err == nil {
+		c.Ctx.Output.SetStatus(200)
+		c.Data["json"] = map[string]interface{}{"Success": true, "Status": 201, "Message": "Espacio Fisico desactivado con exito", "Data": resultado}
+	} else {
+		panic(map[string]interface{}{"funcion": "PutDesactivarEspacioFisico", "err": err, "status": "400"})
+	}
+
 	c.ServeJSON()
 }

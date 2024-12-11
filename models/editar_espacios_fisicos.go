@@ -11,4 +11,6 @@ type EditarEspaciosFisicos struct {
 	TipoUsoId			int
 	TipoEdificacion		string
 	TipoTerreno			string
+	CamposExistentes	*[]CamposEspacioFisico
+	CamposNoExistentes	*[]CamposEspacioFisico
 }
