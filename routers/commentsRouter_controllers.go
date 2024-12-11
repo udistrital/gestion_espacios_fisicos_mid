@@ -9,6 +9,15 @@ func init() {
 
     beego.GlobalControllerRouter["github.com/udistrital/espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"],
         beego.ControllerComments{
+            Method: "PutActivarEspacioFisico",
+            Router: "/ActivarEspacioFisico/:id",
+            AllowHTTPMethods: []string{"put"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"],
+        beego.ControllerComments{
             Method: "BuscarEspacioFisico",
             Router: "/BuscarEspacioFisico",
             AllowHTTPMethods: []string{"post"},
@@ -17,6 +26,15 @@ func init() {
             Params: nil})
 
     beego.GlobalControllerRouter["github.com/udistrital/espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"],
+        beego.ControllerComments{
+            Method: "PutDesactivarEspacioFisico",
+            Router: "/DesactivarEspacioFisico/:id",
+            AllowHTTPMethods: []string{"put"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/gestion_espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"],
         beego.ControllerComments{
             Method: "EditarEspacioFisico",
             Router: "/EditarEspacioFisico",

@@ -55,11 +55,9 @@ func RegistrarEspacioFisico(transaccion *models.NuevoEspacioFisico) (alerta []st
 	fmt.Println("TIPO USO FISICO DEPENDENCIA ID")
 	fmt.Println(creaciones.TipoUsoEspacioFisico)
 
-	if len(transaccion.CamposDinamicos) != 0 {
-		var camposCreados = CrearCampos(transaccion, &creaciones)
-		var espacioFisicoCampoCreados = CrearEspacioFisicoCampo(transaccion, camposCreados, espacioFisico, &creaciones)
+	if len(transaccion.CamposExistentes) != 0 {
+		var espacioFisicoCampoCreados = CrearEspacioFisicoCampo(transaccion, espacioFisico, &creaciones)
 		fmt.Println("CAMPOOOOOS")
-		fmt.Println(camposCreados)
 		fmt.Println(creaciones.CamposId)
 		fmt.Println("ESPACIOS FISICOS CAMPOOOOOS")
 		fmt.Println(espacioFisicoCampoCreados)
@@ -133,61 +131,40 @@ func CrearTipoUsoEspacioFisico(transaccion *models.NuevoEspacioFisico, tipoUso m
 	creaciones.TipoUsoEspacioFisico = int(resTipoUsoEspacioFisicoRegistrado["Id"].(float64))
 }
 
-func CrearCampos(transaccion *models.NuevoEspacioFisico, creaciones *models.Creaciones) (campos []models.Campo) {
-	for _, campo := range transaccion.CamposDinamicos {
-		var campoDinamico models.Campo
-		campoDinamico.Nombre = campo.NombreCampo
-		campoDinamico.Descripcion = campo.Descripcion
-		campoDinamico.CodigoAbreviacion = campo.CodigoAbreviacion
-		campoDinamico.Activo = true
-		campoDinamico.FechaCreacion = time_bogota.TiempoBogotaFormato()
-		campoDinamico.FechaModificacion = time_bogota.TiempoBogotaFormato()
-		url := beego.AppConfig.String("OikosCrudUrl") + "campo"
-		var resCampoRegistrado map[string]interface{}
-		if err := request.SendJson(url, "POST", &resCampoRegistrado, campoDinamico); err != nil || resCampoRegistrado["Id"] == nil {
-			if len(creaciones.CamposId) == 0 {
+func CrearEspacioFisicoCampo(transaccion *models.NuevoEspacioFisico, espacioFisico models.EspacioFisico, creaciones *models.Creaciones) (campos []models.EspacioFisicoCampo) {
+	for _, campo := range transaccion.CamposExistentes{
+		var nuevoCampo models.Campo
+		url := beego.AppConfig.String("OikosCrudUrl") + "campo/" + strconv.Itoa(campo.IdCampo)
+		if err := request.GetJson(url, &nuevoCampo); err != nil{
+			if (len(creaciones.EspacioFisicoCampoId) > 0){
+				rollbackEspacioFisicoCampo(creaciones)
+			}else{
 				rollbackTipoUsoEspacioFisico(creaciones)
-			} else {
-				fmt.Println("ENTRA A A ERROR DE CAMPOOOS")
-				rollbackCrearCampos(creaciones)
 			}
 			logs.Error(err)
 			panic(err.Error())
 		}
-		fmt.Println(resCampoRegistrado["Id"])
-		fmt.Println("CAMPO CREADO")
-		creaciones.CamposId = append(creaciones.CamposId, int(resCampoRegistrado["Id"].(float64)))
-		campoDinamico.Id = int(resCampoRegistrado["Id"].(float64))
-		campos = append(campos, campoDinamico)
-
-	}
-	return campos
-}
-
-func CrearEspacioFisicoCampo(transaccion *models.NuevoEspacioFisico, camposEntrada []models.Campo, espacioFisico models.EspacioFisico, creaciones *models.Creaciones) (campos []models.EspacioFisicoCampo) {
-	for _, campo := range camposEntrada {
 		var espacioFisicoCampo models.EspacioFisicoCampo
-		espacioFisicoCampo.Valor = "0"
+		espacioFisicoCampo.Valor = campo.Valor
 		espacioFisicoCampo.EspacioFisicoId = &espacioFisico
-		espacioFisicoCampo.CampoId = &campo
+		espacioFisicoCampo.CampoId = &nuevoCampo
 		espacioFisicoCampo.Activo = true
 		espacioFisicoCampo.FechaInicio = time_bogota.TiempoBogotaFormato()
-		espacioFisicoCampo.FechaFin = time_bogota.TiempoBogotaFormato()
+		espacioFisicoCampo.FechaFin = nil
 		espacioFisicoCampo.FechaCreacion = time_bogota.TiempoBogotaFormato()
 		espacioFisicoCampo.FechaModificacion = time_bogota.TiempoBogotaFormato()
-		url := beego.AppConfig.String("OikosCrudUrl") + "espacio_fisico_campo"
+		url = beego.AppConfig.String("OikosCrudUrl") + "espacio_fisico_campo"
 		var resEspacioFisicoCampoRegistrado map[string]interface{}
-		if err := request.SendJson(url, "POST", &resEspacioFisicoCampoRegistrado, espacioFisicoCampo); err != nil || resEspacioFisicoCampoRegistrado["Id"] == nil {
-			if len(creaciones.EspacioFisicoCampoId) == 0 {
-				rollbackCrearCampos(creaciones)
-			} else {
+		if err := request.SendJson(url, "POST", &resEspacioFisicoCampoRegistrado, espacioFisicoCampo); err != nil || resEspacioFisicoCampoRegistrado["Id"] == nil{
+			if (len(creaciones.EspacioFisicoCampoId) > 0){
 				rollbackEspacioFisicoCampo(creaciones)
+			}else{
+				rollbackTipoUsoEspacioFisico(creaciones)
 			}
 			logs.Error(err)
 			panic(err.Error())
 		}
 		fmt.Println(resEspacioFisicoCampoRegistrado["Id"])
-		fmt.Println("ESPACIO FISICO CAMPO CREADO")
 		creaciones.EspacioFisicoCampoId = append(creaciones.EspacioFisicoCampoId, int(resEspacioFisicoCampoRegistrado["Id"].(float64)))
 		espacioFisicoCampo.Id = int(resEspacioFisicoCampoRegistrado["Id"].(float64))
 		campos = append(campos, espacioFisicoCampo)
@@ -224,18 +201,6 @@ func rollbackTipoUsoEspacioFisico(creaciones *models.Creaciones) (outputError ma
 	return nil
 }
 
-func rollbackCrearCampos(creaciones *models.Creaciones) (outputError map[string]interface{}) {
-	for _, campo := range creaciones.CamposId {
-		var respuesta map[string]interface{}
-		url := beego.AppConfig.String("OikosCrudUrl") + "campo/" + strconv.Itoa(campo)
-		if err := request.SendJson(url, "DELETE", &respuesta, nil); err != nil {
-			panic("Rollback del crear campo" + err.Error())
-		}
-	}
-	rollbackTipoUsoEspacioFisico(creaciones)
-	return nil
-}
-
 func rollbackEspacioFisicoCampo(creaciones *models.Creaciones) (outputError map[string]interface{}) {
 	for _, campo := range creaciones.EspacioFisicoCampoId {
 		var respuesta map[string]interface{}
@@ -244,6 +209,6 @@ func rollbackEspacioFisicoCampo(creaciones *models.Creaciones) (outputError map[
 			panic("Rollback del espacio fisico campo" + err.Error())
 		}
 	}
-	rollbackCrearCampos(creaciones)
+	rollbackTipoUsoEspacioFisico(creaciones)
 	return nil
 }

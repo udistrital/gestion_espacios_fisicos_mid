@@ -8,7 +8,7 @@ type EspacioFisicoCampo struct {
 	CampoId				*Campo
 	Activo				bool
 	FechaInicio			string
-	FechaFin			string
+	FechaFin			*string
 	FechaCreacion		string
 	FechaModificacion	string
 }
