@@ -86,7 +86,7 @@ func BuscarEspacioFisico(transaccion *models.BusquedaEspacioFisico) (resultadoBu
 			for _, espacio := range lista {
 				encontrado := false
 				if existente, ok := espaciosMap[espacio.Id]; ok {
-					if espacioFisicoIgual(espacio, existente) {
+					if EspacioFisicoIgual(espacio, existente) {
 						contador[espacio.Id]++
 						encontrado = true
 					}
@@ -117,7 +117,7 @@ func BuscarEspacioFisico(transaccion *models.BusquedaEspacioFisico) (resultadoBu
 	return resultadoBusqueda, outputError
 }
 
-func espacioFisicoIgual(a, b models.EspacioFisico) bool {
+func EspacioFisicoIgual(a, b models.EspacioFisico) bool {
 	return a.Id == b.Id
 }
 
