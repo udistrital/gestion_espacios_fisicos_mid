@@ -21,6 +21,8 @@ func EditarEspacioFisico(transaccion *models.EditarEspaciosFisicos) (alerta []st
 	alerta = append(alerta, "Success")
 
 	var espacioFisicoOriginal models.EspacioFisico
+	fmt.Println("transacción ", transaccion)
+	fmt.Println(beego.AppConfig.String("OikosCrudUrl"))
 	url := beego.AppConfig.String("OikosCrudUrl") + "espacio_fisico/" + strconv.Itoa(transaccion.EspacioId)
 	fmt.Println("URL ", url)
 	if err := request.GetJson(url, &espacioFisicoOriginal); err != nil || espacioFisicoOriginal.Id == 0 {
