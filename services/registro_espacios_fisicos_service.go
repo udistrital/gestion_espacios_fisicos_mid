@@ -19,15 +19,15 @@ func RegistrarEspacioFisico(transaccion *models.NuevoEspacioFisico) (alerta []st
 		}
 	}()
 	alerta = append(alerta, "Success")
-
 	var creaciones models.Creaciones
-
 	var tipoEspacioFisico models.TipoEspacioFisico
 	url := beego.AppConfig.String("OikosCrudUrl") + "tipo_espacio_fisico/" + strconv.Itoa(transaccion.TipoEspacioFisico)
 	if err := request.GetJson(url, &tipoEspacioFisico); err != nil || tipoEspacioFisico.Id == 0 {
+		fmt.Println(tipoEspacioFisico)
 		logs.Error(err)
 		panic(err.Error())
 	}
+	fmt.Println("PASO EL PRIMERO")
 
 	var dependencia models.Dependencia
 	url = beego.AppConfig.String("OikosCrudUrl") + "dependencia/" + strconv.Itoa(transaccion.DependenciaPadre)
