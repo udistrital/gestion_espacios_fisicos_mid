@@ -14,11 +14,9 @@ import (
 
 func init() {
 	ns := beego.NewNamespace("/v1",
-		beego.NSNamespace("/espacios_fisicos_mid",
-			beego.NSInclude(
-				&controllers.GestionEspaciosFisicosController{},
-				&controllers.RegistroEspaciosFisicosController{},
-			),
+		beego.NSInclude(
+			&controllers.GestionEspaciosFisicosController{},
+			&controllers.RegistroEspaciosFisicosController{},
 		),
 	)
 	beego.AddNamespace(ns)

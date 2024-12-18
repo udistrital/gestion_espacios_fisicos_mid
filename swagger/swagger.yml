@@ -11,10 +11,10 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 basePath: /v1
 paths:
-  /espacios_fisicos_mid/ActivarEspacioFisico/{id}:
+  /ActivarEspacioFisico/{id}:
     put:
       tags:
-      - espacios_fisicos_mid
+      - github.com/udistrital/espacios_fisicos_mid/controllersGestionEspaciosFisicosController
       description: Activar el espacio fisico
       operationId: GestionEspaciosFisicosController.PutActivarEspacioFisico
       parameters:
@@ -29,10 +29,10 @@ paths:
           description: '{}'
         "400":
           description: the request contains incorrect syntax
-  /espacios_fisicos_mid/BuscarEspacioFisico:
+  /BuscarEspacioFisico:
     post:
       tags:
-      - espacios_fisicos_mid
+      - github.com/udistrital/espacios_fisicos_mid/controllersGestionEspaciosFisicosController
       description: Buscar Espacio Fisico
       operationId: GestionEspaciosFisicosController.BuscarEspacioFisico
       parameters:
@@ -47,10 +47,10 @@ paths:
           description: '{init}'
         "400":
           description: the request contains incorrect syntax
-  /espacios_fisicos_mid/DesactivarEspacioFisico/{id}:
+  /DesactivarEspacioFisico/{id}:
     put:
       tags:
-      - espacios_fisicos_mid
+      - github.com/udistrital/espacios_fisicos_mid/controllersGestionEspaciosFisicosController
       description: Activar el espacio fisico
       operationId: GestionEspaciosFisicosController.PutActivarEspacioFisico
       parameters:
@@ -65,10 +65,10 @@ paths:
           description: '{}'
         "400":
           description: the request contains incorrect syntax
-  /espacios_fisicos_mid/EditarEspacioFisico:
+  /EditarEspacioFisico:
     post:
       tags:
-      - espacios_fisicos_mid
+      - github.com/udistrital/espacios_fisicos_mid/controllersGestionEspaciosFisicosController
       description: Editar espacio fisico
       operationId: GestionEspaciosFisicosController.EditarEspacioFisico
       parameters:
@@ -83,10 +83,10 @@ paths:
           description: '{init}'
         "400":
           description: the request contains incorrect syntax
-  /espacios_fisicos_mid/RegistroEspacioFisico:
+  /RegistroEspacioFisico:
     post:
       tags:
-      - espacios_fisicos_mid
+      - github.com/udistrital/espacios_fisicos_mid/controllersRegistroEspaciosFisicosController
       description: Registro Espacio Fisico
       operationId: RegistroEspaciosFisicosController.RegistroEspacioFisico
       parameters:
@@ -106,6 +106,6 @@ definitions:
     title: '{}'
     type: object
 tags:
-- name: espacios_fisicos_mid
+- name: github.com/udistrital/espacios_fisicos_mid/controllersRegistroEspaciosFisicosController
   description: |
     RegistroController operations for Registro
