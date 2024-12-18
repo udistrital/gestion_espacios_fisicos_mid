@@ -15,10 +15,10 @@
     },
     "basePath": "/v1",
     "paths": {
-        "/espacios_fisicos_mid/ActivarEspacioFisico/{id}": {
+        "/ActivarEspacioFisico/{id}": {
             "put": {
                 "tags": [
-                    "espacios_fisicos_mid"
+                    "github.com/udistrital/espacios_fisicos_mid/controllersGestionEspaciosFisicosController"
                 ],
                 "description": "Activar el espacio fisico",
                 "operationId": "GestionEspaciosFisicosController.PutActivarEspacioFisico",
@@ -43,10 +43,10 @@
                 }
             }
         },
-        "/espacios_fisicos_mid/BuscarEspacioFisico": {
+        "/BuscarEspacioFisico": {
             "post": {
                 "tags": [
-                    "espacios_fisicos_mid"
+                    "github.com/udistrital/espacios_fisicos_mid/controllersGestionEspaciosFisicosController"
                 ],
                 "description": "Buscar Espacio Fisico",
                 "operationId": "GestionEspaciosFisicosController.BuscarEspacioFisico",
@@ -71,10 +71,10 @@
                 }
             }
         },
-        "/espacios_fisicos_mid/DesactivarEspacioFisico/{id}": {
+        "/DesactivarEspacioFisico/{id}": {
             "put": {
                 "tags": [
-                    "espacios_fisicos_mid"
+                    "github.com/udistrital/espacios_fisicos_mid/controllersGestionEspaciosFisicosController"
                 ],
                 "description": "Activar el espacio fisico",
                 "operationId": "GestionEspaciosFisicosController.PutActivarEspacioFisico",
@@ -99,10 +99,10 @@
                 }
             }
         },
-        "/espacios_fisicos_mid/EditarEspacioFisico": {
+        "/EditarEspacioFisico": {
             "post": {
                 "tags": [
-                    "espacios_fisicos_mid"
+                    "github.com/udistrital/espacios_fisicos_mid/controllersGestionEspaciosFisicosController"
                 ],
                 "description": "Editar espacio fisico",
                 "operationId": "GestionEspaciosFisicosController.EditarEspacioFisico",
@@ -127,10 +127,10 @@
                 }
             }
         },
-        "/espacios_fisicos_mid/RegistroEspacioFisico": {
+        "/RegistroEspacioFisico": {
             "post": {
                 "tags": [
-                    "espacios_fisicos_mid"
+                    "github.com/udistrital/espacios_fisicos_mid/controllersRegistroEspaciosFisicosController"
                 ],
                 "description": "Registro Espacio Fisico",
                 "operationId": "RegistroEspaciosFisicosController.RegistroEspacioFisico",
@@ -164,7 +164,7 @@
     },
     "tags": [
         {
-            "name": "espacios_fisicos_mid",
+            "name": "github.com/udistrital/espacios_fisicos_mid/controllersRegistroEspaciosFisicosController",
             "description": "RegistroController operations for Registro\n"
         }
     ]
