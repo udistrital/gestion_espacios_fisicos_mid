@@ -11,6 +11,24 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 basePath: /v1
 paths:
+  /espacios_fisicos_mid/ActivarEspacioFisico/{id}:
+    put:
+      tags:
+      - espacios_fisicos_mid
+      description: Activar el espacio fisico
+      operationId: GestionEspaciosFisicosController.PutActivarEspacioFisico
+      parameters:
+      - in: body
+        name: body
+        description: body Activar Espacio Fisico content
+        required: true
+        schema:
+          $ref: '#/definitions/{}'
+      responses:
+        "200":
+          description: '{}'
+        "400":
+          description: the request contains incorrect syntax
   /espacios_fisicos_mid/BuscarEspacioFisico:
     post:
       tags:
@@ -27,6 +45,24 @@ paths:
       responses:
         "201":
           description: '{init}'
+        "400":
+          description: the request contains incorrect syntax
+  /espacios_fisicos_mid/DesactivarEspacioFisico/{id}:
+    put:
+      tags:
+      - espacios_fisicos_mid
+      description: Activar el espacio fisico
+      operationId: GestionEspaciosFisicosController.PutActivarEspacioFisico
+      parameters:
+      - in: body
+        name: body
+        description: body Desactivar Espacio Fisico content
+        required: true
+        schema:
+          $ref: '#/definitions/{}'
+      responses:
+        "200":
+          description: '{}'
         "400":
           description: the request contains incorrect syntax
   /espacios_fisicos_mid/EditarEspacioFisico:
