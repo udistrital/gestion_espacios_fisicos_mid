@@ -32,9 +32,10 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-	if beego.BConfig.RunMode != "dev" {
+	/*if beego.BConfig.RunMode != "dev" {
 		xray.InitXRay()
-	}
+	}*/
+	xray.InitXRay()
 	beego.ErrorController(&customerrorv2.CustomErrorController{})
 	apistatus.Init()
 	auditoria.InitMiddleware()
