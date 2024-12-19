@@ -22,7 +22,7 @@ func RegistrarEspacioFisico(transaccion *models.NuevoEspacioFisico) (alerta []st
 	var creaciones models.Creaciones
 	var tipoEspacioFisico models.TipoEspacioFisico
 	url := beego.AppConfig.String("OikosCrudUrl") + "tipo_espacio_fisico/" + strconv.Itoa(transaccion.TipoEspacioFisico)
-	if err := request.GetJson(url, &tipoEspacioFisico); err != nil || tipoEspacioFisico.Id == 0 {
+	if err := request.GetJson(url, &tipoEspacioFisico); err != nil /*|| tipoEspacioFisico.Id == 0*/ {
 		fmt.Println(tipoEspacioFisico)
 		logs.Error(err)
 		panic(err.Error())
@@ -132,13 +132,13 @@ func CrearTipoUsoEspacioFisico(transaccion *models.NuevoEspacioFisico, tipoUso m
 }
 
 func CrearEspacioFisicoCampo(transaccion *models.NuevoEspacioFisico, espacioFisico models.EspacioFisico, creaciones *models.Creaciones) (campos []models.EspacioFisicoCampo) {
-	for _, campo := range transaccion.CamposExistentes{
+	for _, campo := range transaccion.CamposExistentes {
 		var nuevoCampo models.Campo
 		url := beego.AppConfig.String("OikosCrudUrl") + "campo/" + strconv.Itoa(campo.IdCampo)
-		if err := request.GetJson(url, &nuevoCampo); err != nil{
-			if (len(creaciones.EspacioFisicoCampoId) > 0){
+		if err := request.GetJson(url, &nuevoCampo); err != nil {
+			if len(creaciones.EspacioFisicoCampoId) > 0 {
 				rollbackEspacioFisicoCampo(creaciones)
-			}else{
+			} else {
 				rollbackTipoUsoEspacioFisico(creaciones)
 			}
 			logs.Error(err)
@@ -155,10 +155,10 @@ func CrearEspacioFisicoCampo(transaccion *models.NuevoEspacioFisico, espacioFisi
 		espacioFisicoCampo.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		url = beego.AppConfig.String("OikosCrudUrl") + "espacio_fisico_campo"
 		var resEspacioFisicoCampoRegistrado map[string]interface{}
-		if err := request.SendJson(url, "POST", &resEspacioFisicoCampoRegistrado, espacioFisicoCampo); err != nil || resEspacioFisicoCampoRegistrado["Id"] == nil{
-			if (len(creaciones.EspacioFisicoCampoId) > 0){
+		if err := request.SendJson(url, "POST", &resEspacioFisicoCampoRegistrado, espacioFisicoCampo); err != nil || resEspacioFisicoCampoRegistrado["Id"] == nil {
+			if len(creaciones.EspacioFisicoCampoId) > 0 {
 				rollbackEspacioFisicoCampo(creaciones)
-			}else{
+			} else {
 				rollbackTipoUsoEspacioFisico(creaciones)
 			}
 			logs.Error(err)
