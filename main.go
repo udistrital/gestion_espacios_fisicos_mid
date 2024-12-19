@@ -7,6 +7,7 @@ import (
 	_ "github.com/udistrital/espacios_fisicos_mid/routers"
 	apistatus "github.com/udistrital/utils_oas/apiStatusLib"
 	"github.com/udistrital/utils_oas/customerrorv2"
+	"github.com/udistrital/utils_oas/xray"
 )
 
 func main() {
@@ -31,7 +32,9 @@ func main() {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
-	//xray.InitXRay()
+	if beego.BConfig.RunMode != "dev" {
+		xray.InitXRay()
+	}
 	beego.ErrorController(&customerrorv2.CustomErrorController{})
 	apistatus.Init()
 	auditoria.InitMiddleware()
