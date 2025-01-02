@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/plugins/cors"
-	auditoria "github.com/udistrital/auditoria"
+	auditoria "github.com/udistrital/utils_oas/auditoria"
 	_ "github.com/udistrital/espacios_fisicos_mid/routers"
 	apistatus "github.com/udistrital/utils_oas/apiStatusLib"
 	"github.com/udistrital/utils_oas/customerrorv2"
