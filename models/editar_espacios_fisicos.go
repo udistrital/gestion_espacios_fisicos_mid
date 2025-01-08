@@ -9,8 +9,8 @@ type EditarEspaciosFisicos struct {
 	DependenciaId		int
 	TipoEspacioId		int
 	TipoUsoId			int
-	TipoEdificacion		string
-	TipoTerreno			string
+	TipoEdificacion		int
+	TipoTerreno			int
 	CamposExistentes	*[]CamposEspacioFisico
 	CamposNoExistentes	*[]CamposEspacioFisico
 }
