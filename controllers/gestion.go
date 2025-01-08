@@ -19,6 +19,8 @@ type GestionEspaciosFisicosController struct {
 func (c *GestionEspaciosFisicosController) URLMapping() {
 	c.Mapping("BuscarEspacioFisico", c.BuscarEspacioFisico)
 	c.Mapping("EditarEspacioFisico", c.EditarEspacioFisico)
+	c.Mapping("ActivarEspacioFisico", c.PutActivarEspacioFisico)
+	c.Mapping("DesactivarEspacioFisico", c.PutDesactivarEspacioFisico)
 }
 
 // BuscarEspacioFisico ...

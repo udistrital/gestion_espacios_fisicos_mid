@@ -21,8 +21,6 @@ func EditarEspacioFisico(transaccion *models.EditarEspaciosFisicos) (alerta []st
 	alerta = append(alerta, "Success")
 
 	var espacioFisicoOriginal models.EspacioFisico
-	fmt.Println("transacción ", transaccion)
-	fmt.Println(beego.AppConfig.String("OikosCrudUrl"))
 	url := beego.AppConfig.String("OikosCrudUrl") + "espacio_fisico/" + strconv.Itoa(transaccion.EspacioId)
 	fmt.Println("URL ", url)
 	if err := request.GetJson(url, &espacioFisicoOriginal); err != nil || espacioFisicoOriginal.Id == 0 {
@@ -32,17 +30,19 @@ func EditarEspacioFisico(transaccion *models.EditarEspaciosFisicos) (alerta []st
 
 	var tiposUsoOriginal []models.TipoUsoEspacioFisico
 	url = beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico?query=EspacioFisicoId.Id:" + strconv.Itoa(transaccion.EspacioId)
-	if err := request.GetJson(url, &tiposUsoOriginal); err != nil || tiposUsoOriginal[0].Id == 0 {
+	if err := request.GetJson(url, &tiposUsoOriginal); err != nil{
 		logs.Error(err)
 		panic(err.Error())
 	}
 
+
 	var dependenciasEspacioOriginal []models.AsignacionEspacioFisicoDependencia
 	url = beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia?query=EspacioFisicoId.Id:" + strconv.Itoa(transaccion.EspacioId)
-	if err := request.GetJson(url, &dependenciasEspacioOriginal); err != nil || dependenciasEspacioOriginal[0].Id == 0 {
+	if err := request.GetJson(url, &dependenciasEspacioOriginal); err != nil{
 		logs.Error(err)
 		panic(err.Error())
 	}
+
 
 	var tipoUsoModificado models.TipoUsoEspacioFisico
 	var dependenciaEspacioModificado models.AsignacionEspacioFisicoDependencia
@@ -99,6 +99,8 @@ func ActualizarEspacioFisico(espacioFisicoOriginal models.EspacioFisico, transac
 	espacioModificado.Nombre = transaccion.Nombre
 	espacioModificado.CodigoAbreviacion = transaccion.CodAbreviacion
 	espacioModificado.Descripcion = transaccion.Descripcion
+	espacioModificado.TipoEdificacionId = transaccion.TipoEdificacion
+	espacioModificado.TipoTerrenoId = transaccion.TipoTerreno
 	espacioModificado.FechaModificacion = time_bogota.TiempoBogotaFormato()
 	if espacioFisicoOriginal.TipoEspacioFisicoId.Id != transaccion.TipoEspacioId {
 		var nuevoTipoEspacio models.TipoEspacioFisico
@@ -131,19 +133,20 @@ func ActualizarNuevoTipoUso(espacioModificado *models.EspacioFisico, transaccion
 	}
 	var tipoUsoOriginal []models.TipoUsoEspacioFisico
 	url = beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico?query=EspacioFisicoId.Id:" + strconv.Itoa(transaccion.EspacioId) + ",Activo:true"
-	if err := request.GetJson(url, &tipoUsoOriginal); err != nil || tipoUsoOriginal[0].Id == 0 {
+	if err := request.GetJson(url, &tipoUsoOriginal); err != nil {
 		logs.Error(err)
 		panic(err.Error())
 	}
-
-	tipoUsoOriginal[0].Activo = false
-	tipoUsoOriginal[0].FechaModificacion = time_bogota.TiempoBogotaFormato()
-	var err error
-	url = beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico/" + strconv.Itoa(tipoUsoOriginal[0].Id)
-	var respuestaTipoUsoOriginal map[string]interface{}
-	if err = request.SendJson(url, "PUT", &respuestaTipoUsoOriginal, tipoUsoOriginal[0]); err != nil {
-		logs.Error(err)
-		panic(err.Error())
+	if len(tipoUsoOriginal) > 0 {
+		tipoUsoOriginal[0].Activo = false
+		tipoUsoOriginal[0].FechaModificacion = time_bogota.TiempoBogotaFormato()
+		var err error
+		url = beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico/" + strconv.Itoa(tipoUsoOriginal[0].Id)
+		var respuestaTipoUsoOriginal map[string]interface{}
+		if err = request.SendJson(url, "PUT", &respuestaTipoUsoOriginal, tipoUsoOriginal[0]); err != nil {
+			logs.Error(err)
+			panic(err.Error())
+		}
 	}
 
 	tipoUsoModificado.Activo = true
@@ -164,46 +167,47 @@ func ActualizarTipoUsoExistente(espacioModificado *models.EspacioFisico, transac
 
 	var tipoUsoOriginal []models.TipoUsoEspacioFisico
 	url := beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico?query=EspacioFisicoId.Id:" + strconv.Itoa(transaccion.EspacioId) + ",Activo:true"
-	if err := request.GetJson(url, &tipoUsoOriginal); err != nil || tipoUsoOriginal[0].Id == 0 {
+	if err := request.GetJson(url, &tipoUsoOriginal); err != nil{
 		logs.Error(err)
 		panic(err.Error())
 	}
-
-	if tipoUsoOriginal[0].TipoUsoId.Id != transaccion.TipoUsoId {
-		tipoUsoOriginal[0].Activo = false
-		tipoUsoOriginal[0].FechaModificacion = time_bogota.TiempoBogotaFormato()
-		var err error
-		url = beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico/" + strconv.Itoa(tipoUsoOriginal[0].Id)
-		var respuestaTipoUsoOriginal map[string]interface{}
-		if err = request.SendJson(url, "PUT", &respuestaTipoUsoOriginal, tipoUsoOriginal[0]); err != nil {
-			logs.Error(err)
-			panic(err.Error())
+	if len(tipoUsoOriginal) > 0{
+		if tipoUsoOriginal[0].TipoUsoId.Id != transaccion.TipoUsoId {
+			tipoUsoOriginal[0].Activo = false
+			tipoUsoOriginal[0].FechaModificacion = time_bogota.TiempoBogotaFormato()
+			var err error
+			url = beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico/" + strconv.Itoa(tipoUsoOriginal[0].Id)
+			var respuestaTipoUsoOriginal map[string]interface{}
+			if err = request.SendJson(url, "PUT", &respuestaTipoUsoOriginal, tipoUsoOriginal[0]); err != nil {
+				logs.Error(err)
+				panic(err.Error())
+			}
+			tipoUsoModificado = ActivarTipoUso(transaccion)
 		}
-		var nuevoTipoUso models.TipoUso
-		url := beego.AppConfig.String("OikosCrudUrl") + "tipo_uso/" + strconv.Itoa(transaccion.TipoUsoId)
-		if err := request.GetJson(url, &nuevoTipoUso); err != nil || nuevoTipoUso.Id == 0 {
-			logs.Error(err)
-			panic(err.Error())
-		}
-		var nuevoTipoUsoActivo []models.TipoUsoEspacioFisico
-		url = beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico?query=EspacioFisicoId.Id:" + strconv.Itoa(transaccion.EspacioId) + ",TipoUsoId.Id:" + strconv.Itoa(transaccion.TipoUsoId)
-		if err := request.GetJson(url, &nuevoTipoUsoActivo); err != nil || nuevoTipoUsoActivo[0].Id == 0 {
-			logs.Error(err)
-			panic(err.Error())
-		}
-
-		tipoUsoModificado = nuevoTipoUsoActivo[0]
-
-		tipoUsoModificado.Activo = true
-		tipoUsoModificado.FechaModificacion = time_bogota.TiempoBogotaFormato()
-		url = beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico/" + strconv.Itoa(tipoUsoModificado.Id)
-		var respuestaTipoUsoExistente map[string]interface{}
-		if err = request.SendJson(url, "PUT", &respuestaTipoUsoExistente, tipoUsoModificado); err != nil {
-			logs.Error(err)
-			panic(err.Error())
-		}
+	}else{
+		tipoUsoModificado = ActivarTipoUso(transaccion)
 	}
 
+	return tipoUsoModificado
+}
+
+func ActivarTipoUso(transaccion *models.EditarEspaciosFisicos) (tipoUsoModificado models.TipoUsoEspacioFisico){ 
+	var nuevoTipoUsoActivo []models.TipoUsoEspacioFisico
+	url := beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico?query=EspacioFisicoId.Id:" + strconv.Itoa(transaccion.EspacioId) + ",TipoUsoId.Id:" + strconv.Itoa(transaccion.TipoUsoId)
+	if err := request.GetJson(url, &nuevoTipoUsoActivo); err != nil || nuevoTipoUsoActivo[0].Id == 0 {
+		logs.Error(err)
+		panic(err.Error())
+	}
+	fmt.Println(nuevoTipoUsoActivo)
+	tipoUsoModificado = nuevoTipoUsoActivo[0]
+	tipoUsoModificado.Activo = true
+	tipoUsoModificado.FechaModificacion = time_bogota.TiempoBogotaFormato()
+	url = beego.AppConfig.String("OikosCrudUrl") + "tipo_uso_espacio_fisico/" + strconv.Itoa(tipoUsoModificado.Id)
+	var respuestaTipoUsoExistente map[string]interface{}
+	if err := request.SendJson(url, "PUT", &respuestaTipoUsoExistente, tipoUsoModificado); err != nil {
+		logs.Error(err)
+		panic(err.Error())
+	}
 	return tipoUsoModificado
 }
 
@@ -217,19 +221,20 @@ func ActualizarNuevaDependencia(espacioModificado *models.EspacioFisico, transac
 
 	var dependenciaEspacioOriginal []models.AsignacionEspacioFisicoDependencia
 	url = beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia?query=EspacioFisicoId.Id:" + strconv.Itoa(transaccion.EspacioId) + ",Activo:true"
-	if err := request.GetJson(url, &dependenciaEspacioOriginal); err != nil || dependenciaEspacioOriginal[0].Id == 0 {
+	if err := request.GetJson(url, &dependenciaEspacioOriginal); err != nil{
 		logs.Error(err)
 		panic(err.Error())
 	}
-
-	dependenciaEspacioOriginal[0].Activo = false
-	dependenciaEspacioOriginal[0].FechaModificacion = time_bogota.TiempoBogotaFormato()
-	var err error
-	url = beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia/" + strconv.Itoa(dependenciaEspacioOriginal[0].Id) + ",Activo:true"
-	var respuestaDependenciaEspacioOriginal map[string]interface{}
-	if err = request.SendJson(url, "PUT", &respuestaDependenciaEspacioOriginal, dependenciaEspacioOriginal[0]); err != nil {
-		logs.Error(err)
-		panic(err.Error())
+	if len(dependenciaEspacioOriginal)> 0{
+		dependenciaEspacioOriginal[0].Activo = false
+		dependenciaEspacioOriginal[0].FechaModificacion = time_bogota.TiempoBogotaFormato()
+		var err error
+		url = beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia/" + strconv.Itoa(dependenciaEspacioOriginal[0].Id) + ",Activo:true"
+		var respuestaDependenciaEspacioOriginal map[string]interface{}
+		if err = request.SendJson(url, "PUT", &respuestaDependenciaEspacioOriginal, dependenciaEspacioOriginal[0]); err != nil {
+			logs.Error(err)
+			panic(err.Error())
+		}
 	}
 
 	dependenciaEspacioModificado.Activo = true
@@ -252,38 +257,46 @@ func ActualizarNuevaDependencia(espacioModificado *models.EspacioFisico, transac
 func ActualizarNuevaDependenciaExistente(espacioModificado *models.EspacioFisico, transaccion *models.EditarEspaciosFisicos) (dependenciaEspacioModificado models.AsignacionEspacioFisicoDependencia) {
 	var dependenciaEspacioOriginal []models.AsignacionEspacioFisicoDependencia
 	url := beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia?query=EspacioFisicoId.Id:" + strconv.Itoa(transaccion.EspacioId) + ",Activo:true"
-	if err := request.GetJson(url, &dependenciaEspacioOriginal); err != nil || dependenciaEspacioOriginal[0].Id == 0 {
+	if err := request.GetJson(url, &dependenciaEspacioOriginal); err != nil{
 		logs.Error(err)
 		panic(err.Error())
 	}
-
-	if dependenciaEspacioOriginal[0].DependenciaId.Id != transaccion.DependenciaId {
-		dependenciaEspacioOriginal[0].Activo = false
-		dependenciaEspacioOriginal[0].FechaModificacion = time_bogota.TiempoBogotaFormato()
-		var err error
-		url = beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia/" + strconv.Itoa(dependenciaEspacioOriginal[0].Id)
-		var respuestaDependenciaEspacioOriginal map[string]interface{}
-		if err = request.SendJson(url, "PUT", &respuestaDependenciaEspacioOriginal, dependenciaEspacioOriginal[0]); err != nil {
-			logs.Error(err)
-			panic(err.Error())
+	if len(dependenciaEspacioOriginal) > 0{
+		if dependenciaEspacioOriginal[0].DependenciaId.Id != transaccion.DependenciaId {
+			dependenciaEspacioOriginal[0].Activo = false
+			dependenciaEspacioOriginal[0].FechaModificacion = time_bogota.TiempoBogotaFormato()
+			var err error
+			url = beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia/" + strconv.Itoa(dependenciaEspacioOriginal[0].Id)
+			var respuestaDependenciaEspacioOriginal map[string]interface{}
+			if err = request.SendJson(url, "PUT", &respuestaDependenciaEspacioOriginal, dependenciaEspacioOriginal[0]); err != nil {
+				logs.Error(err)
+				panic(err.Error())
+			}
+			dependenciaEspacioModificado = ActivarDependenciaEspacioFisico(transaccion)
 		}
-		var nuevaDependenciaEspacioActiva []models.AsignacionEspacioFisicoDependencia
-		url := beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia?query=EspacioFisicoId.Id:" + strconv.Itoa(transaccion.EspacioId) + ",DependenciaId.Id:" + strconv.Itoa(transaccion.DependenciaId)
-		if err := request.GetJson(url, &nuevaDependenciaEspacioActiva); err != nil || nuevaDependenciaEspacioActiva[0].Id == 0 {
-			logs.Error(err)
-			panic(err.Error())
-		}
-		dependenciaEspacioModificado = nuevaDependenciaEspacioActiva[0]
+	}else{
+		dependenciaEspacioModificado = ActivarDependenciaEspacioFisico(transaccion)
+	}
+	return dependenciaEspacioModificado
+}
 
-		dependenciaEspacioModificado.Activo = true
-		dependenciaEspacioModificado.FechaModificacion = time_bogota.TiempoBogotaFormato()
+func ActivarDependenciaEspacioFisico(transaccion *models.EditarEspaciosFisicos) (dependenciaEspacioModificado models.AsignacionEspacioFisicoDependencia) {
+	var nuevaDependenciaEspacioActiva []models.AsignacionEspacioFisicoDependencia
+	url := beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia?query=EspacioFisicoId.Id:" + strconv.Itoa(transaccion.EspacioId) + ",DependenciaId.Id:" + strconv.Itoa(transaccion.DependenciaId)
+	if err := request.GetJson(url, &nuevaDependenciaEspacioActiva); err != nil || nuevaDependenciaEspacioActiva[0].Id == 0 {
+		logs.Error(err)
+		panic(err.Error())
+	}
+	dependenciaEspacioModificado = nuevaDependenciaEspacioActiva[0]
 
-		url = beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia/" + strconv.Itoa(dependenciaEspacioModificado.Id)
-		var respuestaDependenciaEspacioExistente map[string]interface{}
-		if err = request.SendJson(url, "PUT", &respuestaDependenciaEspacioExistente, dependenciaEspacioModificado); err != nil {
-			logs.Error(err)
-			panic(err.Error())
-		}
+	dependenciaEspacioModificado.Activo = true
+	dependenciaEspacioModificado.FechaModificacion = time_bogota.TiempoBogotaFormato()
+
+	url = beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia/" + strconv.Itoa(dependenciaEspacioModificado.Id)
+	var respuestaDependenciaEspacioExistente map[string]interface{}
+	if err := request.SendJson(url, "PUT", &respuestaDependenciaEspacioExistente, dependenciaEspacioModificado); err != nil {
+		logs.Error(err)
+		panic(err.Error())
 	}
 	return dependenciaEspacioModificado
 }
@@ -305,7 +318,6 @@ func AgregarCampos(espacioModificado *models.EspacioFisico, transaccion *models.
 				logs.Error(err)
 				panic(err.Error())
 			}
-			fmt.Println(espacioModificado.Id)
 			var nuevoCampoEspacio models.EspacioFisicoCampo
 			nuevoCampoEspacio.Valor = campo.Valor
 			nuevoCampoEspacio.EspacioFisicoId = espacioModificado
