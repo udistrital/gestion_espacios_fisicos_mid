@@ -1,0 +1,111 @@
+swagger: "2.0"
+info:
+  title: beego Test API
+  description: beego has a very cool tools to autogenerate documents for your API
+  version: 1.0.0
+  termsOfService: http://beego.me/
+  contact:
+    email: astaxie@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+basePath: /v1
+paths:
+  /ActivarEspacioFisico/{id}:
+    put:
+      tags:
+      - github.com/udistrital/espacios_fisicos_mid/controllersGestionEspaciosFisicosController
+      description: Activar el espacio fisico
+      operationId: GestionEspaciosFisicosController.PutActivarEspacioFisico
+      parameters:
+      - in: body
+        name: body
+        description: body Activar Espacio Fisico content
+        required: true
+        schema:
+          $ref: '#/definitions/{}'
+      responses:
+        "200":
+          description: '{}'
+        "400":
+          description: the request contains incorrect syntax
+  /BuscarEspacioFisico:
+    post:
+      tags:
+      - github.com/udistrital/espacios_fisicos_mid/controllersGestionEspaciosFisicosController
+      description: Buscar Espacio Fisico
+      operationId: GestionEspaciosFisicosController.BuscarEspacioFisico
+      parameters:
+      - in: body
+        name: body
+        description: body for Buscar Espacio Fisico content
+        required: true
+        schema:
+          $ref: '#/definitions/{}'
+      responses:
+        "201":
+          description: '{init}'
+        "400":
+          description: the request contains incorrect syntax
+  /DesactivarEspacioFisico/{id}:
+    put:
+      tags:
+      - github.com/udistrital/espacios_fisicos_mid/controllersGestionEspaciosFisicosController
+      description: Activar el espacio fisico
+      operationId: GestionEspaciosFisicosController.PutActivarEspacioFisico
+      parameters:
+      - in: body
+        name: body
+        description: body Desactivar Espacio Fisico content
+        required: true
+        schema:
+          $ref: '#/definitions/{}'
+      responses:
+        "200":
+          description: '{}'
+        "400":
+          description: the request contains incorrect syntax
+  /EditarEspacioFisico:
+    post:
+      tags:
+      - github.com/udistrital/espacios_fisicos_mid/controllersGestionEspaciosFisicosController
+      description: Editar espacio fisico
+      operationId: GestionEspaciosFisicosController.EditarEspacioFisico
+      parameters:
+      - in: body
+        name: body
+        description: body for Editar Espcaio Fisico content
+        required: true
+        schema:
+          $ref: '#/definitions/{}'
+      responses:
+        "201":
+          description: '{init}'
+        "400":
+          description: the request contains incorrect syntax
+  /RegistroEspacioFisico:
+    post:
+      tags:
+      - github.com/udistrital/espacios_fisicos_mid/controllersRegistroEspaciosFisicosController
+      description: Registro Espacio Fisico
+      operationId: RegistroEspaciosFisicosController.RegistroEspacioFisico
+      parameters:
+      - in: body
+        name: body
+        description: body for Registro Espacio Fisico content
+        required: true
+        schema:
+          $ref: '#/definitions/{}'
+      responses:
+        "201":
+          description: '{init}'
+        "400":
+          description: the request contains incorrect syntax
+definitions:
+  '{}':
+    title: '{}'
+    type: object
+tags:
+- name: github.com/udistrital/espacios_fisicos_mid/controllersRegistroEspaciosFisicosController
+  description: |
+    RegistroController operations for Registro
