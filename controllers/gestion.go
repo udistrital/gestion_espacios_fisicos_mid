@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"github.com/astaxie/beego"
 	"github.com/udistrital/espacios_fisicos_mid/helpers"
@@ -17,40 +16,9 @@ type GestionEspaciosFisicosController struct {
 
 //URLMapping...
 func (c *GestionEspaciosFisicosController) URLMapping() {
-	c.Mapping("BuscarEspacioFisico", c.BuscarEspacioFisico)
 	c.Mapping("EditarEspacioFisico", c.EditarEspacioFisico)
 	c.Mapping("ActivarEspacioFisico", c.PutActivarEspacioFisico)
 	c.Mapping("DesactivarEspacioFisico", c.PutDesactivarEspacioFisico)
-}
-
-// BuscarEspacioFisico ...
-// @Title BuscarEspacioFisico
-// @Description Buscar Espacio Fisico
-// @Param	body		body 	{}	true		"body for Buscar Espacio Fisico content"
-// @Success 201 {init}
-// @Failure 400 the request contains incorrect syntax
-// @router /BuscarEspacioFisico [post]
-func (c *GestionEspaciosFisicosController) BuscarEspacioFisico() {
-	fmt.Println("BUSCA ESPACIO FISICO")
-	defer helpers.ErrorController(c.Controller, "BuscarEspacioFisico")
-
-	if v, e := helpers.ValidarBody(c.Ctx.Input.RequestBody); !v || e != nil {
-		panic(map[string]interface{}{"funcion": "BuscarEspacioFisico", "err": helpers.ErrorBody, "status": "400"})
-	}
-
-	var v models.BusquedaEspacioFisico
-
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if resultado, err := services.BuscarEspacioFisico(&v); err == nil {
-			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = map[string]interface{}{"Success": true, "Status": 201, "Message": "Resultado de busqueda", "Data": resultado}
-		} else {
-			panic(err)
-		}
-	} else {
-		panic(map[string]interface{}{"funcion": "BuscarEspacioFisico", "err": err.Error(), "status": "400"})
-	}
-	c.ServeJSON()
 }
 
 // EditarEspacioFisico ...
@@ -67,7 +35,6 @@ func (c *GestionEspaciosFisicosController) EditarEspacioFisico() {
 		panic(map[string]interface{}{"funcion": "EditarEspacioFisico", "err": helpers.ErrorBody, "status": "400"})
 	}
 	var v models.EditarEspaciosFisicos
-	fmt.Println("ENTRA A EDITAR DEPENDENCIA")
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if resultado, err := services.EditarEspacioFisico(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
