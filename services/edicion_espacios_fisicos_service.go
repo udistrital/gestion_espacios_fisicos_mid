@@ -11,7 +11,7 @@ import (
 )
 
 
-func EditarEspacioFisico(transaccion *models.EditarEspaciosFisicos, id int) (alerta []string, outputError map[string]interface{}) {
+func EditarEspacioFisico(transaccion *models.EditarEspaciosFisicos) (alerta []string, outputError map[string]interface{}) {
 	defer func() {
 		if err := recover(); err != nil {
 			outputError = map[string]interface{}{"funcion": "EditarEspacioFisico", "err": err, "status": "500"}
@@ -200,7 +200,7 @@ func ActualizarTipoUsoExistente(espacioModificado *models.EspacioFisico, transac
 
 func ActivarTipoUso(transaccion *models.EditarEspaciosFisicos, objetosOriginales *models.ObjetosSinEditar) { 
 	var nuevoTipoUsoActivo []models.TipoUsoEspacioFisico
-	url := beego.AppConfig.String("OikosCrudUrl") + TIPO_USO_ESPACIO_ID + strconv.Itoa(transaccion.EspacioId)  + ",TipoUsoId.Id:" + strconv.Itoa(transaccion.TipoUsoId)
+	url := beego.AppConfig.String("OikosCrudUrl")+ TIPO_USO_ESPACIO_ID + strconv.Itoa(transaccion.EspacioId)  + ",TipoUsoId.Id:" + strconv.Itoa(transaccion.TipoUsoId)
 	if err := request.GetJson(url, &nuevoTipoUsoActivo); err != nil || nuevoTipoUsoActivo[0].Id == 0 {
 		if objetosOriginales.TipoUsoEspacioFisicoActivo != nil{
 			RollBackTipoUsoEspacioFisicoActivo(objetosOriginales, true)

@@ -25,20 +25,18 @@ func (c *GestionEspaciosFisicosController) URLMapping() {
 // @Title EditarEspacioFisico
 // @Description Editar espacio fisico
 // @Param	body		body 	{}	true		"body for Editar Espcaio Fisico content"
-// @Success 200 {}
+// @Success 201 {init}
 // @Failure 400 the request contains incorrect syntax
-// @router /EditarEspacioFisico/:id [put]
+// @router /EditarEspacioFisico [post]
 func (c *GestionEspaciosFisicosController) EditarEspacioFisico() {
 	defer helpers.ErrorController(c.Controller, "EditarEspacioFisico")
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
 
 	if v, e := helpers.ValidarBody(c.Ctx.Input.RequestBody); !v || e != nil {
 		panic(map[string]interface{}{"funcion": "EditarEspacioFisico", "err": helpers.ErrorBody, "status": "400"})
 	}
 	var v models.EditarEspaciosFisicos
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		if resultado, err := services.EditarEspacioFisico(&v,id); err == nil {
+		if resultado, err := services.EditarEspacioFisico(&v); err == nil {
 			c.Ctx.Output.SetStatus(200)
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": 200, "Message": "Espacio Fisico editado con exito", "Data": resultado}
 		} else {
