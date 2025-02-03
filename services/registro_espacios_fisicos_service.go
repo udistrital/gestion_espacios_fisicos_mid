@@ -73,6 +73,7 @@ func CrearEspacioFisico(transaccion *models.NuevoEspacioFisico, tipoEspacioFisic
 		panic(err.Error())
 	}
 	creaciones.EspacioFisicoId = int(resEspacioFisicoRegistrado["Id"].(float64))
+	nuevoEspacioFisico.Id = int(resEspacioFisicoRegistrado["Id"].(float64))
 	return nuevoEspacioFisico
 }
 
