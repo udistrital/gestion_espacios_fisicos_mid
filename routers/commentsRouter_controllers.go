@@ -28,8 +28,8 @@ func init() {
     beego.GlobalControllerRouter["github.com/udistrital/espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"] = append(beego.GlobalControllerRouter["github.com/udistrital/espacios_fisicos_mid/controllers:GestionEspaciosFisicosController"],
         beego.ControllerComments{
             Method: "EditarEspacioFisico",
-            Router: "/EditarEspacioFisico",
-            AllowHTTPMethods: []string{"post"},
+            Router: "/EditarEspacioFisico/:id",
+            AllowHTTPMethods: []string{"put"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})
