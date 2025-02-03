@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/astaxie/beego"
@@ -12,7 +11,7 @@ import (
 )
 
 
-func EditarEspacioFisico(transaccion *models.EditarEspaciosFisicos) (alerta []string, outputError map[string]interface{}) {
+func EditarEspacioFisico(transaccion *models.EditarEspaciosFisicos, id int) (alerta []string, outputError map[string]interface{}) {
 	defer func() {
 		if err := recover(); err != nil {
 			outputError = map[string]interface{}{"funcion": "EditarEspacioFisico", "err": err, "status": "500"}
@@ -20,7 +19,6 @@ func EditarEspacioFisico(transaccion *models.EditarEspaciosFisicos) (alerta []st
 		}
 	}()
 	alerta = append(alerta, "Success")
-	
 	var objetosOriginales models.ObjetosSinEditar
 
 	var espacioFisicoOriginal models.EspacioFisico
@@ -70,32 +68,7 @@ func EditarEspacioFisico(transaccion *models.EditarEspaciosFisicos) (alerta []st
 	if len(*transaccion.CamposExistentes) == 0 && len(*transaccion.CamposNoExistentes) == 0{
 		EliminarCampos(transaccion, &objetosOriginales)
 	}
-	fmt.Println("ESPACIO FISICO")
-	fmt.Println(objetosOriginales.EspacioFisico)
-	fmt.Println("TIPO DE USO ACTIVO")
-	fmt.Println(objetosOriginales.TipoUsoEspacioFisicoActivo)
-	fmt.Println("TIPO DE USO NO ACTIVO")
-	fmt.Println(objetosOriginales.TipoUsoEspacioFisicoNoActivo)
-	fmt.Println("NUEVO TIPO USO")
-	fmt.Println(objetosOriginales.NuevoTipoUsoEspacioFisico)
-	fmt.Println("ASIGNACION ACTIVA")
-	fmt.Println(objetosOriginales.AsignacionEspacioFisicoDependenciaActivo)
-	fmt.Println("ASISGNACION NO ACTIVA")
-	fmt.Println(objetosOriginales.AsignacionEspacioFisicoDependenciaNoActivo)
-	fmt.Println("NUEVA ASIGNACION")
-	fmt.Println(objetosOriginales.NuevaAsignacionEspacioFisicoDependencia)
-	fmt.Println("CAMPOS ACTIVOS")
-	for _, campo := range objetosOriginales.CamposActivos {
-		fmt.Println(campo)
-	}
-	fmt.Println("CAMPOS NO ACTIVOS")
-	for _, campo := range objetosOriginales.CamposNoActivos {
-		fmt.Println(campo)
-	}
-	fmt.Println("NUEVOS CAMPOS")
-	for _, campo := range objetosOriginales.NuevoCampo {
-		fmt.Println(campo)
-	}
+	
 	return alerta, outputError
 }
 

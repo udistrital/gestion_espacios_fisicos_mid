@@ -190,7 +190,7 @@ func TestEditarEspacioFisico(t *testing.T) {
 		fmt.Println(objetosOriginales.NuevaAsignacionEspacioFisicoDependencia)
 		fmt.Println("CAMPOS ACTIVOS")
 
-		alerta, outputError := services.EditarEspacioFisico(transaccion)
+		alerta, outputError := services.EditarEspacioFisico(transaccion, transaccion.EspacioId)
 
         if len(alerta) == 0 || alerta[0] != "Success" {
             t.Errorf("Se esperaba una alerta con 'Success', pero se obtuvo: %v", alerta)
