@@ -22,46 +22,35 @@ func RegistrarEspacioFisico(transaccion *models.NuevoEspacioFisico) (alerta []st
 	var creaciones models.Creaciones
 	var tipoEspacioFisico models.TipoEspacioFisico
 	url := beego.AppConfig.String("OikosCrudUrl") + "tipo_espacio_fisico/" + strconv.Itoa(transaccion.TipoEspacioFisico)
-	if err := request.GetJson(url, &tipoEspacioFisico); err != nil /*|| tipoEspacioFisico.Id == 0*/ {
-		fmt.Println(tipoEspacioFisico)
+	if err := request.GetJson(url, &tipoEspacioFisico); err != nil || tipoEspacioFisico.Id == 0 {
 		logs.Error(err)
 		panic(err.Error())
 	}
-	fmt.Println("PASO EL PRIMERO")
 
 	var dependencia models.Dependencia
 	url = beego.AppConfig.String("OikosCrudUrl") + "dependencia/" + strconv.Itoa(transaccion.DependenciaPadre)
-	if err := request.GetJson(url, &dependencia); err != nil || tipoEspacioFisico.Id == 0 {
+	if err := request.GetJson(url, &dependencia); err != nil || dependencia.Id == 0 {
 		logs.Error(err)
 		panic(err.Error())
 	}
 
 	var tipoUso models.TipoUso
 	url = beego.AppConfig.String("OikosCrudUrl") + "tipo_uso/" + strconv.Itoa(transaccion.TipoUso)
-	if err := request.GetJson(url, &tipoUso); err != nil || tipoEspacioFisico.Id == 0 {
+	if err := request.GetJson(url, &tipoUso); err != nil || tipoUso.Id == 0 {
 		logs.Error(err)
 		panic(err.Error())
 	}
 
+	
 	var espacioFisico = CrearEspacioFisico(transaccion, tipoEspacioFisico, &creaciones)
 
 	CrearAsignacionEspacioFisicoDependencia(transaccion, dependencia, espacioFisico, &creaciones)
 	CrearTipoUsoEspacioFisico(transaccion, tipoUso, espacioFisico, &creaciones)
-	fmt.Println("ESPACIO FISICO ID")
-	fmt.Println(creaciones.EspacioFisicoId)
-	fmt.Println(espacioFisico)
-	fmt.Println("ASIGNACION ESPACIO FISICO DEPENDENCIA ID")
-	fmt.Println(creaciones.AsignacionEspacioFisicoDependenciaId)
-	fmt.Println("TIPO USO FISICO DEPENDENCIA ID")
-	fmt.Println(creaciones.TipoUsoEspacioFisico)
+
 
 	if len(transaccion.CamposExistentes) != 0 {
 		var espacioFisicoCampoCreados = CrearEspacioFisicoCampo(transaccion, espacioFisico, &creaciones)
-		fmt.Println("CAMPOOOOOS")
-		fmt.Println(creaciones.CamposId)
-		fmt.Println("ESPACIOS FISICOS CAMPOOOOOS")
 		fmt.Println(espacioFisicoCampoCreados)
-		fmt.Println(creaciones.EspacioFisicoCampoId)
 	}
 
 	return alerta, outputError
@@ -84,8 +73,6 @@ func CrearEspacioFisico(transaccion *models.NuevoEspacioFisico, tipoEspacioFisic
 		panic(err.Error())
 	}
 	creaciones.EspacioFisicoId = int(resEspacioFisicoRegistrado["Id"].(float64))
-	nuevoEspacioFisico.Id = int(resEspacioFisicoRegistrado["Id"].(float64))
-	fmt.Println("ESPACIO FISICO CREADO")
 	return nuevoEspacioFisico
 }
 
@@ -102,13 +89,10 @@ func CrearAsignacionEspacioFisicoDependencia(transaccion *models.NuevoEspacioFis
 	url := beego.AppConfig.String("OikosCrudUrl") + "asignacion_espacio_fisico_dependencia"
 	var resAsignacionEspacioFisicoDependenciaRegistrado map[string]interface{}
 	if err := request.SendJson(url, "POST", &resAsignacionEspacioFisicoDependenciaRegistrado, asignacionEspacioFisicoDependencia); err != nil || resAsignacionEspacioFisicoDependenciaRegistrado["Id"] == nil {
-		fmt.Println("ENTRA A ERROR DE ASIGNACION")
 		rollbackEspacioFisicoCreado(creaciones)
 		logs.Error(err)
 		panic(err.Error())
 	}
-	fmt.Println(resAsignacionEspacioFisicoDependenciaRegistrado["Id"])
-	fmt.Println("ASIGNACION CREADO")
 	creaciones.AsignacionEspacioFisicoDependenciaId = int(resAsignacionEspacioFisicoDependenciaRegistrado["Id"].(float64))
 }
 
@@ -126,8 +110,6 @@ func CrearTipoUsoEspacioFisico(transaccion *models.NuevoEspacioFisico, tipoUso m
 		logs.Error(err)
 		panic(err.Error())
 	}
-	fmt.Println(resTipoUsoEspacioFisicoRegistrado["Id"])
-	fmt.Println("TIPO USO CREADO")
 	creaciones.TipoUsoEspacioFisico = int(resTipoUsoEspacioFisicoRegistrado["Id"].(float64))
 }
 
@@ -164,7 +146,6 @@ func CrearEspacioFisicoCampo(transaccion *models.NuevoEspacioFisico, espacioFisi
 			logs.Error(err)
 			panic(err.Error())
 		}
-		fmt.Println(resEspacioFisicoCampoRegistrado["Id"])
 		creaciones.EspacioFisicoCampoId = append(creaciones.EspacioFisicoCampoId, int(resEspacioFisicoCampoRegistrado["Id"].(float64)))
 		espacioFisicoCampo.Id = int(resEspacioFisicoCampoRegistrado["Id"].(float64))
 		campos = append(campos, espacioFisicoCampo)
